@@ -17,6 +17,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".EditorActivity"></activity>
+        <provider
+            android:authorities="gargi.com.pets"
+            android:name=".data.PetProvider"
+            android:exported="false"
+            />
+        
     </application>
 
 </manifest>

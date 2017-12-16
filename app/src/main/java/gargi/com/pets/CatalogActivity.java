@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -47,7 +48,7 @@ public class CatalogActivity extends AppCompatActivity {
 
     public void displayDatabaseInfo() {
 
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+       // SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         String[] projection = {
                 PetEntry._ID,
@@ -57,14 +58,16 @@ public class CatalogActivity extends AppCompatActivity {
                 PetEntry.COLUMN_PET_WEIGHT };
 
         // Perform a query on the pets table
-        Cursor cursor = db.query(
+     /*   Cursor cursor = db.query(
                 PetEntry.TABLE_NAME,   // The table to query
                 projection,            // The columns to return
                 null,                  // The columns for the WHERE clause
                 null,                  // The values for the WHERE clause
                 null,                  // Don't group the rows
                 null,                  // Don't filter by row groups
-                null);                   // The sort order
+                null);                   // The sort order             */
+
+     Cursor cursor = getContentResolver().query(PetEntry.CONTENT_URI,projection,null,null, null);
 
         TextView displayView = (TextView) findViewById(R.id.text_view_pet);
 
@@ -106,7 +109,7 @@ public class CatalogActivity extends AppCompatActivity {
     }
 
 
-   /* private void insertPet() {
+    private void insertPet() {
 
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
@@ -116,9 +119,11 @@ public class CatalogActivity extends AppCompatActivity {
         values.put(PetEntry.COLUMN_PET_GENDER, PetEntry.GENDER_MALE);
         values.put(PetEntry.COLUMN_PET_WEIGHT, 7);
 
+        Uri newUri = getContentResolver().insert(PetEntry.CONTENT_URI, values);
 
-        long newRowId = db.insert(PetEntry.TABLE_NAME, null, values);
-    }  */
+        // long newRowId = db.insert(PetEntry.TABLE_NAME, null, values);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -133,8 +138,8 @@ public class CatalogActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.action_insert_dummy_data:
-               // insertPet();
-                //displayDatabaseInfo();
+                insertPet();
+                displayDatabaseInfo();
                 return true;
 
             case R.id.action_delete_all_entries:
